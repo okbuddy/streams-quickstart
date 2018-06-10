@@ -1,11 +1,15 @@
 package myapps;
 
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.util.Locale;
 import java.util.Arrays;
@@ -50,6 +54,7 @@ public class WordCount {
             try {
                     streams.start();
                     countDownLatch.await();
+                System.out.println("wordcount end with ctrl_C !!!!!!");
             }catch (Exception e){
                     e.printStackTrace();
                     System.exit(1);
