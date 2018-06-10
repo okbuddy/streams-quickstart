@@ -7,6 +7,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
 
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
@@ -23,8 +24,8 @@ public class LineSplit {
         properties.put(StreamsConfig.RETRIES_CONFIG,3);
         properties.put(StreamsConfig.RETRY_BACKOFF_MS_CONFIG,100);
         final StreamsBuilder builder=new StreamsBuilder();
-        KStream<String,String> source=builder.stream("streams-plaintext-input2");
-        source.to("streams-pipe-output");
+        KStream<String,String> source=builder.stream("streams-plaintext-input");
+        source.flatMapValues(value->Arrays.asList(value.split("\\W+"))).to("streams-linesplit-output");
         final Topology topology=builder.build();
             System.out.println(topology.describe());
             final KafkaStreams streams=new KafkaStreams(topology,properties);
